@@ -1,1 +1,28 @@
-# Your Solution
+version: '3'
+services:
+
+  library-deakin:
+    image: library-deakin
+    build: 
+      context: ./book_catalog
+      dockerfile: Dockerfile
+    container_name: library-deakin
+    ports:
+     - "6000:6000"
+    environment:
+      - PORT=6000
+      - DATABASE_URL=postgresql://sit722_postgresql_7_2p_doa4_user:x8OeoceQXp4wNLcTmkWrFU4vJn4weYXH@dpg-crilr768ii6s73f5petg-a.singapore-postgres.render.com/sit722_postgresql_7_2p_doa4
+    restart: "no"
+
+  inventory-deakin:
+    image: inventory-deakin
+    build: 
+      context: ./inventory_management
+      dockerfile: Dockerfile
+    container_name: inventory-deakin
+    ports:
+     - "7000:7000"
+    environment:
+      - PORT=7000
+      - DATABASE_URL=postgresql://sit722_postgresql_7_2p_doa4_user:x8OeoceQXp4wNLcTmkWrFU4vJn4weYXH@dpg-crilr768ii6s73f5petg-a.singapore-postgres.render.com/sit722_postgresql_7_2p_doa4
+    restart: "no"

@@ -1,1 +1,80 @@
-# Your Solution
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: library-deakin
+  labels:
+    app: library-deakin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: library-deakin
+  template:
+    metadata:
+      labels:
+        app: library-deakin
+    spec:
+      containers:
+      - name: library-deakin
+        image: deakinproject.azurecr.io/library-deakin:latest
+        imagePullPolicy: IfNotPresent 
+        env:
+        - name: PORT
+          value: "6000"
+        - name: DATABASE_URL
+          value: "postgresql://sit722_postgresql_7_2p_doa4_user:x8OeoceQXp4wNLcTmkWrFU4vJn4weYXH@dpg-crilr768ii6s73f5petg-a.singapore-postgres.render.com/sit722_postgresql_7_2p_doa4"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: library-deakin
+spec:
+  selector:
+    app: library-deakin
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 31000
+      targetPort: 6000
+
+
+---
+#deployment details for loading deakin-library image (book_catalog)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-deakin
+  labels:
+    app: inventory-deakin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-deakin
+  template:
+    metadata:
+      labels:
+        app: inventory-deakin
+    spec:
+      containers:
+      - name: inventory-deakin
+        image: deakinproject.azurecr.io/inventory-deakin:latest
+        imagePullPolicy: IfNotPresent 
+        env:
+        - name: PORT
+          value: "7000"
+        - name: DATABASE_URL
+          value: "postgresql://sit722_postgresql_7_2p_doa4_user:x8OeoceQXp4wNLcTmkWrFU4vJn4weYXH@dpg-crilr768ii6s73f5petg-a.singapore-postgres.render.com/sit722_postgresql_7_2p_doa4"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-deakin
+spec:
+  selector:
+    app: inventory-deakin
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 32000
+      targetPort: 7000
